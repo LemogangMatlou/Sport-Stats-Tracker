@@ -10,11 +10,11 @@ function LandingPage() {
         <header>
           {/* Use onClick handlers to trigger navigation */}
           <button className="hbtn" onClick={() => navigate('/login')}>
-            Login &rarr;
+            Login/SignUp &rarr;
           </button>
-          <button className="hbtn" onClick={() => navigate('/signup')}>
+          {/* <button className="hbtn" onClick={() => navigate('/signup')}>
             Sign Up &rarr;
-          </button>
+          </button> */}
         </header>
         <main>
           <section className="text">

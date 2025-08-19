@@ -1,23 +1,62 @@
-import Login from './pages/login';
-import Signup from './pages/signup';
-import LandingPage from './pages/landingPage.tsx'
-import { BrowserRouter as Router,Routes, Route} from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+import { SignedIn, SignedOut, RedirectToSignIn, SignIn, SignUp } from '@clerk/clerk-react';
 
+import LandingPage from './pages/landingPage';
+import Dashboard from './pages/dashboard';
 
-const App : React.FC = () => {
-
+const App: React.FC = () => {
   return (
-    <Router>
-      <section className = "App">
-        <Routes>
-          <Route path ="/" element= {<LandingPage/>}/>
-          <Route path = "/login" element = {<Login/>} />
-          <Route path = "/signup" element = {<Signup/>}/>
-        </Routes>
-      </section>
-    </Router>
-  )
-}
+    <Routes>
+      {/* Public Landing Page */}
+      <Route path="/" element={<LandingPage />} />
 
-export default App
+      {/* Login Page with SSO callback handling */}
+      <Route
+        path="/login/*"
+        element={
+          <SignIn
+            path="/login"
+            routing="path"
+            signUpUrl="/signup"
+            fallbackRedirectUrl="/dashboard" // Redirect after sign-in
+          />
+        }
+      />
 
+      {/* Signup Page */}
+      <Route
+        path="/signup"
+        element={
+          <SignUp
+            path="/signup"
+            routing="path"
+            signInUrl="/login"
+            fallbackRedirectUrl="/dashboard" // Redirect after signup & verification
+          />
+        }
+      />
+      
+      {/* Protected Dashboard */}
+      <Route
+        path="/dashboard"
+        element={
+          <SignedIn>
+            <Dashboard />
+          </SignedIn>
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <SignedOut>
+            <RedirectToSignIn />
+          </SignedOut>
+        }
+      />
+    </Routes>
+
+    
+  );
+};
+
+export default App;
